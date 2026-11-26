@@ -1,0 +1,51 @@
+*&---------------------------------------------------------------------*
+*& Report ZINTERACTIVE_REPORT_TASK_1
+*&---------------------------------------------------------------------*
+REPORT ZINTERACTIVE_REPORT_SK1.
+
+TABLES: MARA.
+
+TYPES: BEGIN OF STR_MARA,
+         MATNR TYPE MARA-MATNR,
+         ERNAM TYPE MARA-ERNAM,
+         MTART TYPE MARA-MTART,
+         MBRSH TYPE MARA-MBRSH,
+         MATKL TYPE MARA-MATKL,
+         MEINS TYPE MARA-MEINS,
+       END OF STR_MARA.
+
+DATA: IT_MARA TYPE TABLE OF STR_MARA,
+      WA_MARA TYPE STR_MARA.
+
+SELECTION-SCREEN BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-100.
+  SELECT-OPTIONS: P_MATNR FOR MARA-MATNR.
+SELECTION-SCREEN END OF BLOCK B1.
+
+TOP-OF-PAGE.
+  WRITE: / 'MATERIAL NO',
+         25 'USER NAME',
+         40 'MAT TYPE',
+         50 'IND SEC',
+         60 'MAT GRUP',
+         70 'UNIT'.
+  ULINE.
+
+START-OF-SELECTION.
+  SELECT MATNR
+         ERNAM
+         MTART
+         MBRSH
+         MATKL
+         MEINS
+    FROM MARA
+    INTO CORRESPONDING FIELDS OF TABLE IT_MARA
+    WHERE MATNR IN P_MATNR.
+
+  LOOP AT IT_MARA INTO WA_MARA.
+    WRITE: / WA_MARA-MATNR COLOR 4,
+             25 WA_MARA-ERNAM,
+             40 WA_MARA-MTART,
+             50 WA_MARA-MBRSH,
+             60 WA_MARA-MATKL,
+             70 WA_MARA-MEINS.
+  ENDLOOP.
